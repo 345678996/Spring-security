@@ -5,15 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
-import javax.sql.DataSource;
 
 @Configuration
 public class ProjectSecurityConfigurations { 
@@ -31,12 +27,12 @@ public class ProjectSecurityConfigurations {
 	}
 
     // DataSource object is populated by application.property file.
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        // UserDetails user = User.withUsername("Kanav").password("{noop}1234.").authorities("read").build();
-        // UserDetails admin = User.withUsername("admin").password("{bcrypt}$2a$12$UJKcDI5UtTc4DW7NIsPGW.SsAeSzq.PMvaxzwKgegOL.aRj0T.Eve").authorities("admin").build();
-        return new JdbcUserDetailsManager(dataSource);
-    }
+    // @Bean
+    // public UserDetailsService userDetailsService(DataSource dataSource) {
+    //     UserDetails user = User.withUsername("Kanav").password("{noop}1234.").authorities("read").build();
+    //     UserDetails admin = User.withUsername("admin").password("{bcrypt}$2a$12$UJKcDI5UtTc4DW7NIsPGW.SsAeSzq.PMvaxzwKgegOL.aRj0T.Eve").authorities("admin").build();
+    //     return new JdbcUserDetailsManager(dataSource);
+    // }
 
     @Bean
     public PasswordEncoder passwordEncoder () {
