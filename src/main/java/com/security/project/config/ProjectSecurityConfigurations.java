@@ -42,4 +42,10 @@ public class ProjectSecurityConfigurations {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    // Check wether the user given password is used in any of the dat breach? i.e recommend user to use strong password
+    // @Bean
+    // public CompromisedPasswordChecker compromisedPasswordChecker() {
+    //     return new HaveIBeenPwnedRestApiPasswordChecker();
+    // }
+
 }
