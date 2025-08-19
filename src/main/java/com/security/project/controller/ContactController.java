@@ -1,0 +1,10 @@
+package com.security.project.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+
+public class ContactController {
+    @GetMapping("/contact")
+    public String saveContactInquiryDetails() {
+        return "Inquiry details saved in DB";
+    }
+}
