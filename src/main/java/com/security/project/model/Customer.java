@@ -14,7 +14,7 @@ public class Customer {
     private String pwd;
     private String role;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
