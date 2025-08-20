@@ -13,8 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@Profile("!prod")
-public class ProjectSecurityConfigurations { 
+@Profile("prod")
+public class ProjectProdSecurityConfigurations { 
 
     @Bean
 	@Order(SecurityProperties.BASIC_AUTH_ORDER)
