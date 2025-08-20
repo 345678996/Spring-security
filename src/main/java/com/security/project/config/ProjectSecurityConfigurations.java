@@ -20,6 +20,8 @@ public class ProjectSecurityConfigurations {
 	@Order(SecurityProperties.BASIC_AUTH_ORDER)
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		// http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
+        // rcc -> request channel configuration
+        http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()); // Only HTTP
         http.authorizeHttpRequests((requests) -> requests
                                         .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
                                         .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
