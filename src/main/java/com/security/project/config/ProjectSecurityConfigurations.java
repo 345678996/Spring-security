@@ -24,10 +24,12 @@ public class ProjectSecurityConfigurations {
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		// http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
         // rcc -> request channel configuration
+        // smc -> session management config
+        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession"));
         http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()); // Only HTTP
         http.authorizeHttpRequests((requests) -> requests
                                         .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
-                                        .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
+                                        .requestMatchers("/notices", "/contact", "/error", "/register", "invalidSession").permitAll());
 		http.formLogin(withDefaults());
 		// hbc -> http basic config
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
