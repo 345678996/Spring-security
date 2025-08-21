@@ -29,7 +29,9 @@ public class ProjectProdSecurityConfigurations {
                                         .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
 		http.formLogin(withDefaults());
         // hbc -> http basic config
-		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+        // ehc -> exception handling config
+        http.exceptionHandling(ehc -> ehc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+		// http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
         http.csrf(csrfConfig -> csrfConfig.disable());
 		return http.build();
 	}
