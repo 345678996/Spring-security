@@ -10,6 +10,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.security.project.exceptions.CustomBasicAuthenticationEntryPoint;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -26,7 +28,8 @@ public class ProjectProdSecurityConfigurations {
                                         .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
                                         .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
 		http.formLogin(withDefaults());
-		http.httpBasic(withDefaults());
+        // hbc -> http basic config
+		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
         http.csrf(csrfConfig -> csrfConfig.disable());
 		return http.build();
 	}
