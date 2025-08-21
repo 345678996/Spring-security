@@ -9,11 +9,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.security.project.exceptions.CustomAccessDeniedHandler;
 import com.security.project.exceptions.CustomBasicAuthenticationEntryPoint;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import static org.springframework.security.config.Customizer.withDefaults;
+
+import java.util.Collections;
 
 @Configuration
 @Profile("prod")
@@ -26,6 +32,17 @@ public class ProjectProdSecurityConfigurations {
         // rcc -> request channel configuration
         // smc -> session management config
         http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(1).maxSessionsPreventsLogin(true))
+            .cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
+                public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(Collections.singletonList("https://localhost:4200"));
+                    config.setAllowedMethods(Collections.singletonList("*"));
+                    config.setAllowCredentials(true);
+                    config.setAllowedHeaders(Collections.singletonList("*"));
+                    config.setMaxAge(3600L);
+                    return config;
+                }
+            }))
             .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPs
             .authorizeHttpRequests((requests) -> requests
                                     .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
