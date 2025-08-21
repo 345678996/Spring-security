@@ -25,7 +25,7 @@ public class ProjectSecurityConfigurations {
 		// http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
         // rcc -> request channel configuration
         // smc -> session management config
-        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(1).maxSessionsPreventsLogin(true))
+        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(3).maxSessionsPreventsLogin(true))
             .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // Only HTTP
             .authorizeHttpRequests((requests) -> requests
                                         .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
