@@ -10,6 +10,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.security.project.exceptions.CustomAccessDeniedHandler;
 import com.security.project.exceptions.CustomBasicAuthenticationEntryPoint;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -30,6 +31,9 @@ public class ProjectSecurityConfigurations {
 		http.formLogin(withDefaults());
 		// hbc -> http basic config
 		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+        // ehc -> exception handling config
+        http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()));
+        // http.exceptionHandling(ehc -> ehc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
         http.csrf(csrfConfig -> csrfConfig.disable());
 		return http.build();
 	}
