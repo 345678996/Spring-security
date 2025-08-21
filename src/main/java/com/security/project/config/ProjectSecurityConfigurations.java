@@ -25,18 +25,18 @@ public class ProjectSecurityConfigurations {
 		// http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
         // rcc -> request channel configuration
         // smc -> session management config
-        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession"));
-        http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()); // Only HTTP
-        http.authorizeHttpRequests((requests) -> requests
+        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(1).maxSessionsPreventsLogin(true))
+            .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // Only HTTP
+            .authorizeHttpRequests((requests) -> requests
                                         .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
-                                        .requestMatchers("/notices", "/contact", "/error", "/register", "invalidSession").permitAll());
-		http.formLogin(withDefaults());
+                                        .requestMatchers("/notices", "/contact", "/error", "/register", "invalidSession").permitAll())
+		    .formLogin(withDefaults())
 		// hbc -> http basic config
-		http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+		    .httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()))
         // ehc -> exception handling config
-        http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()));
+            .exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()))
         // http.exceptionHandling(ehc -> ehc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
-        http.csrf(csrfConfig -> csrfConfig.disable());
+            .csrf(csrfConfig -> csrfConfig.disable());
 		return http.build();
 	}
 
