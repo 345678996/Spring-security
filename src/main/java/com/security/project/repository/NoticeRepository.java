@@ -12,7 +12,6 @@ import com.security.project.model.Notices;
 @Repository
 public interface NoticeRepository extends CrudRepository<Notices, Long> {
 	
-	@Query(value = "from Notice n where CURDATE() BETWEEN noticBegDt AND noticEndDt")
-	List<Notices> findAllActiveNotices();
-
+	@Query(value = "from Notices n where CURDATE() BETWEEN noticBegDt AND noticEndDt")
+    List<Notices> findAllActiveNotices();
 }

@@ -29,7 +29,7 @@ public class ProjectSecurityConfigurations {
             .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // Only HTTP
             .authorizeHttpRequests((requests) -> requests
                                         .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
-                                        .requestMatchers("/notices", "/contact", "/error", "/register", "invalidSession").permitAll())
+                                        .requestMatchers("/notices", "/contact", "/error", "/register", "invalidSession", "/user").permitAll())
 		    .formLogin(withDefaults())
 		// hbc -> http basic config
 		    .httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()))
