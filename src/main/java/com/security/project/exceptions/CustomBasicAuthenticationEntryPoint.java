@@ -31,7 +31,7 @@ public class CustomBasicAuthenticationEntryPoint implements AuthenticationEntryP
 
             String jsonResponse = String.format("{\"timestamp\": \"%s\", \"status\": %d, \"error\": \"%s\", \"message\": \"%s\", \"path\": \"%s\"}", 
             currentTimeStamp, HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), message, path);
-            response.getWriter().write(jsonResponse);
+            response.getWriter().write(jsonResponse);;
         }
 
 }
