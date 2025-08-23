@@ -57,10 +57,14 @@ public class ProjectProdSecurityConfigurations {
             .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
             .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPs
             .authorizeHttpRequests((requests) -> requests
-                                    .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
-                                    .requestMatchers( "/myBalance").hasAuthority("VIEWBALANCE")
-                                    .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
-                                    .requestMatchers("/myCards").hasAuthority("VIEWCARDS")
+                                    // .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
+                                        // .requestMatchers( "/myBalance").hasAuthority("VIEWBALANCE")
+                                        // .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
+                                        // .requestMatchers("/myCards").hasAuthority("VIEWCARDS")
+                                        .requestMatchers("/myAccount").hasRole("USER")
+                                        .requestMatchers( "/myBalance").hasAnyRole("USER", "ADMIN")
+                                        .requestMatchers("/myLoans").hasRole("USER")
+                                        .requestMatchers("/myCards").hasRole("USER")
                                     .requestMatchers("/user").authenticated()
                                     .requestMatchers("/notices", "/contact", "/error", "/register", "invalidSession").permitAll())
 		    .formLogin(withDefaults())
