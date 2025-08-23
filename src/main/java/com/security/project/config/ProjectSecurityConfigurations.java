@@ -38,7 +38,7 @@ public class ProjectSecurityConfigurations {
         // rcc -> request channel configuration
         // smc -> session management config
         http.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
-            .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+            .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
                 public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                     CorsConfiguration config = new CorsConfiguration();
