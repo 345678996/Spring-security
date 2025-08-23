@@ -43,7 +43,7 @@ public class ProjectProdSecurityConfigurations {
             .cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
                 public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                    config.setAllowedOrigins(Collections.singletonList("https://localhost:4200")); // <----- HTTPs
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(Collections.singletonList("*"));
@@ -57,8 +57,12 @@ public class ProjectProdSecurityConfigurations {
             .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
             .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPs
             .authorizeHttpRequests((requests) -> requests
-                                    .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
-                                    .requestMatchers("/notices", "/contact", "/error", "/register", "/invalidSession", "/user").permitAll())
+                                    .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
+                                    .requestMatchers( "/myBalance").hasAuthority("VIEWBALANCE")
+                                    .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
+                                    .requestMatchers("/myCards").hasAuthority("VIEWCARDS")
+                                    .requestMatchers("/user").authenticated()
+                                    .requestMatchers("/notices", "/contact", "/error", "/register", "invalidSession").permitAll())
 		    .formLogin(withDefaults())
         // hbc -> http basic config
 		    .httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()))
