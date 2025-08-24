@@ -24,7 +24,7 @@ import com.security.project.filter.JwtTokenValidatorFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.config.Customizer.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,16 +42,17 @@ public class ProjectSecurityConfigurations {
         // smc -> session management config
         http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
-                public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
-                    config.setAllowedMethods(Collections.singletonList("*"));
-                    config.setAllowCredentials(true);
-                    config.setAllowedHeaders(Collections.singletonList("*"));
-                    config.setExposedHeaders(Arrays.asList("Authorization"));
-                    config.setMaxAge(3600L);
-                    return config;
-                }
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                        config.setAllowedMethods(Collections.singletonList("*"));
+                        config.setAllowCredentials(true);
+                        config.setAllowedHeaders(Collections.singletonList("*"));
+                        config.setExposedHeaders(Arrays.asList("Authorization"));
+                        config.setMaxAge(3600L);
+                        return config;
+                    }
             }))
             .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
                             .ignoringRequestMatchers("/contact", "/register")
@@ -71,7 +72,7 @@ public class ProjectSecurityConfigurations {
                                         .requestMatchers("/myCards").hasRole("USER")
                                         .requestMatchers("/user").authenticated()
                                         .requestMatchers("/notices", "/contact", "/error", "/register", "invalidSession").permitAll())
-		    .formLogin(withDefaults())
+		.formLogin(withDefaults())
 		// hbc -> http basic config
 		    .httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()))
         // ehc -> exception handling config
