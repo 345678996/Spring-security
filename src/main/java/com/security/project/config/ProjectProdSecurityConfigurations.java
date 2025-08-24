@@ -19,11 +19,14 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import com.security.project.exceptions.CustomAccessDeniedHandler;
 import com.security.project.exceptions.CustomBasicAuthenticationEntryPoint;
 import com.security.project.filter.CsrfCookieFilter;
+import com.security.project.filter.JwtTokenGeneratorFilter;
+import com.security.project.filter.JwtTokenValidatorFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -38,8 +41,7 @@ public class ProjectProdSecurityConfigurations {
 		// http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
         // rcc -> request channel configuration
         // smc -> session management config
-        http.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
-            .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
                 public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                     CorsConfiguration config = new CorsConfiguration();
@@ -47,6 +49,7 @@ public class ProjectProdSecurityConfigurations {
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(Collections.singletonList("*"));
+                    config.setExposedHeaders(Arrays.asList("Authorization"));
                     config.setMaxAge(3600L);
                     return config;
                 }
@@ -55,6 +58,8 @@ public class ProjectProdSecurityConfigurations {
                             .ignoringRequestMatchers("/contact", "/register")
                             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
             .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+            .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+            .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
             .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPs
             .authorizeHttpRequests((requests) -> requests
                                     // .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")

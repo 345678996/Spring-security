@@ -24,6 +24,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // SignUp
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody Customer customer) {
         try{
@@ -42,6 +43,7 @@ public class UserController {
         }
     }
 
+    // Login
     @RequestMapping("/user")
     public Customer getUserDetailsAfterLogin(Authentication authentication) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(authentication.getName());
